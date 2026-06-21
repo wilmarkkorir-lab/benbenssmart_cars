@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api/';
+
 const api = axios.create({
-  baseURL: 'https://benbenssmartcars.alwaysdata.net/api/',
-  timeout: 15000, // 15 second timeout
+  baseURL: BASE_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },

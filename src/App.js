@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ConnectionTest from './components/ConnectionTest';
 import Home from './pages/Home';
 import Cars from './pages/Cars';
 import CarDetail from './pages/CarDetail';
@@ -25,7 +24,6 @@ function ProtectedRoute({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
-      <ConnectionTest />
       <Routes>
         {/* Admin routes - no navbar/footer */}
         <Route path="/admin/login" element={<AdminLogin />} />
