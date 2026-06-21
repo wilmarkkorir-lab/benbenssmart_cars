@@ -12,7 +12,8 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => {
-    cache[response.config.url] = response.data;
+    const key = response.config.url.replace(response.config.baseURL, '');
+    cache[key] = response.data;
     return response;
   },
   (error) => {
