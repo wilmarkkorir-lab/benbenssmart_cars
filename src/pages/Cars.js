@@ -20,19 +20,6 @@ export default function Cars() {
   });
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  // Debounce function for search
-  const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  };
-
   // Load categories
   useEffect(() => {
     api.get('categories/')
@@ -124,13 +111,10 @@ export default function Cars() {
   }, []);
 
   // Debounced filter application
-  const debouncedApplyFilters = useCallback(
-    debounce((currentFilters) => {
-      const filtered = applyFilters(allCars, currentFilters);
-      setCars(filtered);
-    }, 300),
-    [allCars, applyFilters]
-  );
+  const debouncedApplyFilters = useCallback((currentFilters) => {
+    const filtered = applyFilters(allCars, currentFilters);
+    setCars(filtered);
+  }, [allCars, applyFilters]);
 
   // Apply filters when they change
   useEffect(() => {
