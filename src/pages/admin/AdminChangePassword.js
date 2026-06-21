@@ -11,7 +11,6 @@ export default function AdminChangePassword() {
     setError('');
     setSuccess('');
 
-    const storedUsername = localStorage.getItem('admin_username') || 'admin';
     const storedPassword = localStorage.getItem('admin_password') || 'admin123';
 
     if (form.current !== storedPassword) {
