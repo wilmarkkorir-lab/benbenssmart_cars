@@ -2,5 +2,8 @@
   "framework": "create-react-app",
   "buildCommand": "npm run build",
   "installCommand": "npm install --legacy-peer-deps",
-  "outputDirectory": "build"
+  "outputDirectory": "build",
+  "env": {
+    "REACT_APP_API_URL": "https://benbenssmartcars.alwaysdata.net/api/"
+  }
 }

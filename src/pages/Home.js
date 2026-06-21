@@ -33,6 +33,7 @@ export default function Home() {
   useEffect(() => {
     api.get('cars/?ordering=-created_at')
       .then(res => setCars(res.data.results || res.data))
+      .catch(() => setCars([]))
       .finally(() => setLoading(false));
   }, []);
 
