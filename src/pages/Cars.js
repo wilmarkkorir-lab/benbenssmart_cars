@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 import CarCard from '../components/CarCard';
+import Loading from '../components/Loading';
 
 export default function Cars() {
   const [cars, setCars] = useState([]);
@@ -26,6 +27,7 @@ export default function Cars() {
         if (category) data = data.filter(c => String(c.category) === category);
         setCars(data);
       })
+      .catch(err => console.error('Error loading cars:', err))
       .finally(() => setLoading(false));
   }, [search, condition, category, ordering]);
 
@@ -33,8 +35,13 @@ export default function Cars() {
     <section className="section">
       <div className="container">
         <h2 className="section-title">All <span>Cars</span></h2>
+        <p className="section-subtitle">Find your perfect vehicle from our extensive collection</p>
         <div className="filters">
-          <input placeholder="Search brand, model..." value={search} onChange={e => setSearch(e.target.value)} />
+          <input 
+            placeholder="Search brand, model..." 
+            value={search} 
+            onChange={e => setSearch(e.target.value)} 
+          />
           <select value={condition} onChange={e => setCondition(e.target.value)}>
             <option value="">All Conditions</option>
             <option value="new">New</option>
@@ -52,10 +59,19 @@ export default function Cars() {
           </select>
         </div>
         {loading
-          ? <div className="loading">Loading cars...</div>
+          ? <Loading text="Loading cars..." />
           : cars.length === 0
-            ? <div className="empty">No cars found.</div>
-            : <div className="car-grid">{cars.map(car => <CarCard key={car.id} car={car} />)}</div>
+            ? <div className="empty">No cars found. Try adjusting your filters.</div>
+            : (
+              <>
+                <p style={{ textAlign: 'center', color: '#888', marginBottom: '20px' }}>
+                  Found {cars.length} car{cars.length !== 1 ? 's' : ''}
+                </p>
+                <div className="car-grid">
+                  {cars.map(car => <CarCard key={car.id} car={car} />)}
+                </div>
+              </>
+            )
         }
       </div>
     </section>
