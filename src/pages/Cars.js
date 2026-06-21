@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getCached } from '../api';
+import api from '../api';
 import CarCard from '../components/CarCard';
 import Loading from '../components/Loading';
 
@@ -22,14 +22,14 @@ export default function Cars() {
 
   // Load categories
   useEffect(() => {
-    getCached('categories/')
+    api.get('categories/')
       .then(res => setCategories(res.data.results || res.data))
       .catch(() => {});
   }, []);
 
   useEffect(() => {
     setLoading(true);
-    getCached('cars/')
+    api.get('cars/')
       .then(res => {
         const data = res.data.results || res.data;
         setAllCars(data);
