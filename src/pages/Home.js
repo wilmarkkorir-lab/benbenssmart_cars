@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import { getCached } from '../api';
 import CarCard from '../components/CarCard';
 
 const TYPING_WORDS = ['Dream Car', 'Perfect SUV', 'Family Sedan', 'Luxury Ride', 'Budget Car'];
@@ -31,7 +31,7 @@ export default function Home() {
   }, [displayed, deleting, wordIndex]);
 
   useEffect(() => {
-    api.get('cars/?ordering=-created_at')
+    getCached('cars/?ordering=-created_at')
       .then(res => setCars(res.data.results || res.data))
       .catch(() => setCars([]))
       .finally(() => setLoading(false));

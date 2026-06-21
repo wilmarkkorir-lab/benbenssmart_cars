@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import api from '../api';
+import { getCached } from '../api';
 import CarCard from '../components/CarCard';
 import Loading from '../components/Loading';
 
@@ -22,28 +22,20 @@ export default function Cars() {
 
   // Load categories
   useEffect(() => {
-    api.get('categories/')
+    getCached('categories/')
       .then(res => setCategories(res.data.results || res.data))
-      .catch(err => console.error('Error loading categories:', err));
+      .catch(() => {});
   }, []);
 
-  // Load all cars initially
   useEffect(() => {
     setLoading(true);
-    api.get('cars/?is_available=all')
+    getCached('cars/')
       .then(res => {
         const data = res.data.results || res.data;
         setAllCars(data);
         setCars(data);
       })
-      .catch(err => {
-        console.error('Error loading cars:', err);
-        // Show user-friendly error message
-        const errorMessage = err.message || 'Failed to load cars';
-        alert(`Connection Error: ${errorMessage}\n\nPlease check:\n1. Your internet connection\n2. Try refreshing the page\n3. The server might be temporarily unavailable`);
-        setAllCars([]);
-        setCars([]);
-      })
+      .catch(() => { setAllCars([]); setCars([]); })
       .finally(() => setLoading(false));
   }, []);
 
