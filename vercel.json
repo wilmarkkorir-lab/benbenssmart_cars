@@ -1,0 +1,6 @@
+{
+  "buildCommand": "CI=false npm run build",
+  "framework": "create-react-app",
+  "installCommand": "npm install --silent --no-audit --no-fund",
+  "outputDirectory": "build"
+}
