@@ -35,7 +35,11 @@ export default function Cars() {
         setAllCars(data);
         setCars(data);
       })
-      .catch(() => { setAllCars([]); setCars([]); })
+      .catch(err => {
+        console.error('Error loading cars:', err.message);
+        setAllCars([]);
+        setCars([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
