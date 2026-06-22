@@ -39,12 +39,12 @@ export default function AdminLogin() {
         <h2>🔐 Admin Login</h2>
         <p>BenBens Smart Cars Management</p>
         {error && <div className="error-msg">{error}</div>}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label>Username</label>
             <input
               required
-              autoComplete="username"
+              autoComplete="off"
               value={form.username}
               onChange={e => setForm({ ...form, username: e.target.value })}
               placeholder="admin"
@@ -55,7 +55,7 @@ export default function AdminLogin() {
             <input
               required
               type="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={form.password}
               onChange={e => setForm({ ...form, password: e.target.value })}
               placeholder="••••••••"
