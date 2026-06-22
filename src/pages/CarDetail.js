@@ -23,11 +23,22 @@ export default function CarDetail() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const customerRes = await api.post('customers/', {
-        name: form.name, email: form.email, phone: form.phone,
-      });
+      let customerId;
+      try {
+        const customerRes = await api.post('customers/', {
+          name: form.name, email: form.email, phone: form.phone,
+        });
+        customerId = customerRes.data.id;
+      } catch (customerErr) {
+        if (customerErr.response?.data?.email) {
+          const existing = await api.get(`customers/?email=${form.email}`);
+          const customers = existing.data.results || existing.data;
+          if (customers.length > 0) customerId = customers[0].id;
+          else throw customerErr;
+        } else throw customerErr;
+      }
       await api.post('inquiries/', {
-        car: id, customer: customerRes.data.id, message: form.message,
+        car: id, customer: customerId, message: form.message,
       });
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', message: '' });
