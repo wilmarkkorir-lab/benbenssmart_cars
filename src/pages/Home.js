@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import CarCard from '../components/CarCard';
@@ -31,7 +31,7 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [displayed, deleting, wordIndex]);
 
-  const fetchCars = (attempt = 1) => {
+  const fetchCars = useCallback((attempt = 1) => {
     setLoading(true);
     setError(false);
     api.get('cars/?ordering=-created_at')
@@ -45,9 +45,9 @@ export default function Home() {
         }
       })
       .finally(() => setLoading(false));
-  };
+  }, []);
 
-  useEffect(() => { fetchCars(); }, []);
+  useEffect(() => { fetchCars(); }, [fetchCars]);
 
   return (
     <>
