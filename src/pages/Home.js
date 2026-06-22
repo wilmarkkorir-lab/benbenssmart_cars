@@ -8,6 +8,7 @@ const TYPING_WORDS = ['Dream Car', 'Perfect SUV', 'Family Sedan', 'Luxury Ride',
 export default function Home() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
   const [displayed, setDisplayed] = useState('');
   const [deleting, setDeleting] = useState(false);
@@ -30,12 +31,23 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [displayed, deleting, wordIndex]);
 
-  useEffect(() => {
+  const fetchCars = (attempt = 1) => {
+    setLoading(true);
+    setError(false);
     api.get('cars/?ordering=-created_at')
       .then(res => setCars(res.data.results || res.data))
-      .catch(() => setCars([]))
+      .catch(() => {
+        if (attempt < 3) {
+          setTimeout(() => fetchCars(attempt + 1), 3000);
+        } else {
+          setCars([]);
+          setError(true);
+        }
+      })
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { fetchCars(); }, []);
 
   return (
     <>
@@ -135,6 +147,11 @@ export default function Home() {
           </div>
           {loading
             ? <div className="loading"><div className="spinner" />Loading cars...</div>
+            : error
+              ? <div className="empty">
+                  <p>Failed to load cars. Please check your connection.</p>
+                  <button className="btn btn-primary" onClick={fetchCars}>Retry</button>
+                </div>
             : cars.length === 0
               ? <div className="empty">No cars available yet. Check back soon!</div>
               : <>
