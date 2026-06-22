@@ -12,21 +12,41 @@ export default function Contact() {
     setSending(true);
     setError('');
     try {
-      // Save customer and inquiry to backend
-      const customerRes = await api.post('customers/', {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-      });
+      // Get or create customer by email
+      let customerId;
+      try {
+        const customerRes = await api.post('customers/', {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+        });
+        customerId = customerRes.data.id;
+      } catch (customerErr) {
+        // If email already exists, fetch the existing customer
+        if (customerErr.response?.data?.email) {
+          const existing = await api.get(`customers/?email=${form.email}`);
+          const customers = existing.data.results || existing.data;
+          if (customers.length > 0) {
+            customerId = customers[0].id;
+          } else {
+            throw customerErr;
+          }
+        } else {
+          throw customerErr;
+        }
+      }
+
+      // Save inquiry
       await api.post('inquiries/', {
-        customer: customerRes.data.id,
+        customer: customerId,
         message: form.message,
-        car: null,
       });
+
       setSent(true);
       setForm({ name: '', email: '', phone: '', message: '' });
-    } catch {
-      setError('Failed to send message. Please contact us directly.');
+    } catch (err) {
+      console.error('Contact form error:', err.response?.data || err.message);
+      setError('Failed to send message. Please contact us directly via WhatsApp or Email.');
     } finally {
       setSending(false);
     }
