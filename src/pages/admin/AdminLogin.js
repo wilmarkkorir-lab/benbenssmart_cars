@@ -19,25 +19,14 @@ export default function AdminLogin() {
       });
       if (res.data.token) {
         localStorage.setItem('admin_auth', 'true');
-        localStorage.setItem('admin_token', res.data.token);
-        localStorage.setItem('admin_username', form.username);
+        localStorage.setItem('admin_username', res.data.username);
         navigate('/admin');
-      } else {
-        setError('Login failed. Please try again.');
       }
     } catch (err) {
-      if (err.response?.status === 400 || err.response?.status === 401) {
+      if (err.response?.status === 401) {
         setError('Invalid username or password.');
       } else {
-        // Fallback to hardcoded credentials if auth endpoint not available
-        const storedUsername = localStorage.getItem('admin_username') || 'admin';
-        const storedPassword = localStorage.getItem('admin_password') || 'Benbens@2026';
-        if (form.username === storedUsername && form.password === storedPassword) {
-          localStorage.setItem('admin_auth', 'true');
-          navigate('/admin');
-        } else {
-          setError('Invalid username or password.');
-        }
+        setError('Login failed. Please try again.');
       }
     } finally {
       setLoading(false);
