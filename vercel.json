@@ -5,5 +5,8 @@
   "outputDirectory": "build",
   "env": {
     "REACT_APP_API_URL": "https://benbenssmartcars.alwaysdata.net/api/"
-  }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
