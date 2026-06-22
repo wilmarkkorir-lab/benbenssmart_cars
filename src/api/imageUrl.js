@@ -2,6 +2,6 @@ const MEDIA_URL = process.env.REACT_APP_MEDIA_URL || 'https://benbenssmartcars.a
 
 export function imageUrl(path) {
   if (!path) return null;
-  if (path.startsWith('http')) return path;
+  if (path.startsWith('http')) return path.replace('http://', 'https://');
   return `${MEDIA_URL}${path}`;
 }
